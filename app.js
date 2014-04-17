@@ -13,9 +13,17 @@ var fs = require('fs');
 var app = express();
 var multiparty= require('multiparty');
 var util = require('util');
-
+var uristring= process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/images';
+var theport = process.env.PORT  || 5000;
 var appDir = path.dirname(require.main.filename);
-mongoose.connect('mongodb://localhost/images');
+mongoose.connect(uristring, function(err,res){
+	if (err) {
+		console.log('ERROR connecting to: '+uristring+'. ' + err)
+	}
+	else {
+		console.log('Succeeded connected to: '+uristring);
+	}
+});
 var conn = mongoose.connection;
 conn.on('error', console.error.bind(console, 'Database connection error, fcukkk:'));
 conn.once('open', function callback() {console.log("sup stud, Database connected.")});
