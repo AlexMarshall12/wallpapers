@@ -11,9 +11,10 @@ var imagedb = require('./models/db');
 var mongoose = require('mongoose');
 var fs = require('fs');
 var app = express();
+var logfmt=require('logfmt');
 var multiparty= require('multiparty');
 var util = require('util');
-var uristring= process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/images';
+var uristring= 'mongodb://'+process.env.MONGOLAB_URI+'/images';
 var theport = process.env.PORT  || 5000;
 var appDir = path.dirname(require.main.filename);
 mongoose.connect(uristring, function(err,res){
