@@ -1,0 +1,18 @@
+extends layout
+link(rel='stylesheet', href='/stylesheets/style.css')
+block content
+  body
+    div.wrapper
+      div.container
+        dive#two-columns.grid-container(style='display:block;')
+          ul.rig.columns-4
+            each image in images
+              li
+                img(src="/images/#{image.source}" name="original")
+                span
+                  form(method="POST" action="/view/#{image._id}" enctype="multipart/form-data")
+                    input(type="image" src="/images/#{image.source}" name="bigImage" width="300")
+                    input(type="hidden" name="file_name" value="#{image.source}")
+                    input(type="hidden" name="id" value="#{image._id}")
+                p #{image.score}
+   
