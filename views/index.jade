@@ -10,7 +10,7 @@ block content
               li
                 img(src="/images/#{image.source}" name="original")
                 span
-                  form(method="POST" action="/view/#{image._id.str}" enctype="multipart/form-data")
+                  form(method="POST" action="/view/#{image._id}" enctype="multipart/form-data")
                     input(type="image" src="/images/#{image.source}" name="bigImage" width="300")
                     input(type="hidden" name="file_name" value="#{image.source}")
                     input(type="hidden" name="id" value="#{image._id.str}")
