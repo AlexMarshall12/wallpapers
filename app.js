@@ -12,7 +12,6 @@ var mongoose = require('mongoose');
 var fs = require('fs');
 var app = express();
 var logfmt=require('logfmt');
-var multiparty= require('multiparty');
 var util = require('util');
 var uristring= 'mongodb://'+process.env.MONGOLAB_URI+'/images';
 var theport = process.env.PORT  || 5000;
