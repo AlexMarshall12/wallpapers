@@ -17,7 +17,7 @@ var util = require('util');
 var uristring= 'mongodb://'+process.env.MONGOLAB_URI+'/images';
 var theport = process.env.PORT  || 5000;
 var appDir = path.dirname(require.main.filename);
-mongoose.connect(uristring, function(err,res){
+mongoose.connect(uristring,{ server: { socketOptions: { connectTimeoutMS: 1000 }}}, function(err,res){
 	if (err) {
 		console.log('ERROR connecting to: '+uristring+'. ' + err)
 	}
