@@ -8,11 +8,11 @@ block content
           ul.rig.columns-4
             each image in images
               li
-                img(src="/images/#{image.source}" name="original")
+                img(src="/images/#{image.source.str}" name="original")
                 span
                   form(method="POST" action="/view/#{image._id.str)}" enctype="multipart/form-data")
-                    input(type="image" src="/images/#{image.source}" name="bigImage" width="300")
-                    input(type="hidden" name="file_name" value="#{image.source}")
-                    input(type="hidden" name="id" value="#{image._id}")
+                    input(type="image" src="/images/#{image.source.str}" name="bigImage" width="300")
+                    input(type="hidden" name="file_name" value="#{image.source.str}")
+                    input(type="hidden" name="id" value="#{image._id.str}")
                 p #{image.score}
 
