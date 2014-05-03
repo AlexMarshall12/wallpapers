@@ -13,7 +13,8 @@ var fs = require('fs');
 var app = express();
 var logfmt=require('logfmt');
 var util = require('util');
-var uristring= "mongodb://localhost:27017/images" || 'mongodb://'+process.env.MONGOLAB_URI+'/images';
+//var uristring= "mongodb://localhost:27017/images" || 'mongodb://'+process.env.MONGOLAB_URI+'/images';
+var uristring= 'mongodb://'+process.env.MONGOLAB_URI+'/images';
 var theport = process.env.PORT  || 5000;
 var appDir = path.dirname(require.main.filename);
 mongoose.connect(uristring,{ server: { socketOptions: { connectTimeoutMS: 1000 }}}, function(err,res){
