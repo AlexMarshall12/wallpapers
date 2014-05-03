@@ -21,6 +21,24 @@ header{
 	z-index:100;
 }
 
+.paginate {
+	float:right;
+}
+
+.paginate a {
+	color:white;
+	margin-left:3px;
+	font-size:1.1em;
+}
+
+.paginate a:visited {
+	color:white;
+	margin-left:3px;
+}
+
+.paginate.button-link{
+	float:left;
+}
 
 .about ul{
 	margin-left: 40px;
@@ -176,8 +194,8 @@ ul.rig.columns-4 li:hover{
 }
 
 ul.rig.columns-4 li:hover span{
-    top:-5px;
-    left:-10px;
+    top:-20px;
+    left:-25px;
     border:2px solid #669999;
     border-radius:5px;
 }
