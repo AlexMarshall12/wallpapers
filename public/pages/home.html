@@ -1,0 +1,14 @@
+<div id="container" on-scrolled="loaddata()">
+    <h1>Home Page</h1>
+    <p>{{data}}</p>  
+    <ul>
+        <li ng-repeat="datum in data">
+        <img ng-src="https://s3.amazonaws.com/supercuber.images/thumb_{{datum}}" ng-click="goLarge = !goLarge" ng-show="!goLarge" class="effectfront">
+            <div ng-show="goLarge" ng-click="goLarge = !goLarge">
+                <img src="https://s3.amazonaws.com/supercuber.images/{{datum}}">
+                <div id="test_box"><p>please buy my books</p></div>
+                <span my-draggable>Drag ME!!!!!!!!!!!!1</span>
+            </div>
+        </li>
+    </ul>
+</div>

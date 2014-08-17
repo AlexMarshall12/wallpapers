@@ -15,7 +15,7 @@ var app = express();
 var logfmt=require('logfmt');
 var util = require('util');
 var cookieParser = require('cookie-parser');
-var uristring= "mongodb://localhost:27017/images";
+var uristring= "mongodb://heroku_app24230415:l91npmc6qlrdole3ptlq0s8not@ds045157.mongolab.com:45157/heroku_app24230415";
 //var uristring= 'mongodb://'+process.env.MONGOLAB_URI+'/images';
 var theport = process.env.PORT  || 5000;
 var appDir = path.dirname(require.main.filename);
@@ -35,8 +35,7 @@ var Image = conn.model("Image", imagedb.imageSchema);
 
 // all environments
 app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.use(express.static(__dirname + '/public'));
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
@@ -49,10 +48,29 @@ if ('development' == app.get('env')) {
 	app.use(express.errorHandler());
 }
 
-app.get('/', getImages);
+app.get('/', function(req,res){
+	res.render('index');
+});
+app.get('/data', getImages);
 app.get('/users', user.list);
 app.get('/about', function(req,res){res.render('about')});
-app.post('/view/:id', vote_and_view); 
+app.post('/data', vote_and_view);
+app.get('/data/:image_id', function(req,res){
+	id = req.url.slice(6,30);
+	console.log(id);
+	Image.findById(id,function(err,data){
+		if(err){
+			console.log(err);
+		}
+		else{
+		res.json(data);}
+	});
+});
+
+app.get('/view/:image_id',function(req,res){
+	console.log(req.url.slice(6,30));
+	res.render('view');
+});
 
 function shuffled_array(array_length){
 	var currentIndex=array_length
@@ -74,19 +92,28 @@ function shuffled_array(array_length){
 	return temp_array;
 }
 
-//function vote(id){
-//	Image.findByIdAndUpdate(id,{$set: {score:10}})
 
 function getImages(req,res){
-	var numPages = 4;
+	var numPages = 16;
 	var page = (req.param('page') === undefined)? 1:req.param('page');
 	console.log(page);
 	var perPage=12;
 	var return_array=[];
 	var image_ids=[];
-	var number_images=45;
-	console.log(req.cookies);
+	var number_images=185;
+	//console.log(req.cookies);
 	Image.find({}, function(err,images){
+		if (err) {
+			console.log('error');
+		} else {
+			for (var i=0;i<number_images;i++) { 
+				return_array.push(images[i]);
+			};
+			res.json(return_array);
+		}
+		});
+}
+	/*Image.find({}, function(err,images){
 		if (err) {
 			console.log('error');
 		}
@@ -101,7 +128,7 @@ function getImages(req,res){
 				}
 				res.cookie('ordering',list_indexes);
 				console.log('ordering not found');
-				res.render('index',{images:return_array, image_ids:JSON.stringify(image_ids)})
+				res.json(return_array);
 			}
 			else {
 				var order_array = req.cookies.ordering;
@@ -117,11 +144,12 @@ function getImages(req,res){
 						image_ids.push(images[i]._id);
 					}
 				}
-				res.render('index',{images:return_array, image_ids:JSON.stringify(image_ids)});
+				res.json(return_array);
 			}
 		}
 	});
-}
+});
+*/
 
 function vote_and_view(req,res){
 	var id=req.url.slice(6,30);
@@ -132,6 +160,7 @@ function vote_and_view(req,res){
 			console.log(err);
 			else {
 				console.log(image);
+				adjust(image.score);
 				res.render('viewImage',{chosen:image.source,score:image.score,id_array:id_array[1]});
 			};
 		});
@@ -140,10 +169,36 @@ function vote_and_view(req,res){
 	else {
 		console.log('ddjkdl');
 	}
-	for (var i =0;i<12;i++){
-		Image.findByIdAndUpdate(id_array[i], {$inc: { score:8}}, function(err, image){
-			console.log(image);
-		});
+	function adjust(winner_score){
+		var K=1;
+		var winner_index = id_array.indexOf(id);
+		if (winner_index > -1){
+			id_array.splice(winner_index,1);
+		}
+		adjustment_values=[];
+		old_values=[];
+		for (var i =0;i<id_array.length;i++){
+			Image.findById(id_array[i], function(err, loser){
+				loser_expected_value=1/(1+10)^((winner_score-loser.score)/2);
+				adjustment_values.push(1/((1+10)^((loser.score-winner_score)/2)));
+				console.log(1/Math.pow(1+10,(loser.score-winner_score)/2));
+				loser_corr = Math.exp(-Math.pow(loser.score-5,2)/3);
+				loser.score=loser.score-K*(loser_expected_value);
+				loser.save();
+			});
+			
+			winner_corr=Math.exp(-Math.pow(winner_score-5,2)/3);
+			var winner_adjust = adjustment_values.reduce(function(x,y){return x+K*(1-y)},0);
+			console.log('winner_adjust:'+winner_adjust)
+			console.log(adjustment_values);
+			/*
+			Image.findByIdAndUpdate(id, {$inc: {score: winner_adjust}},function(err,winner){
+				if(err) console.log('error errorrrrr')
+				else {console.log(winner)}
+			});
+			*/
+
+		}
 	}
 }
 
