@@ -17,6 +17,10 @@ body{
     background-color: 909090;
 }
 
+.meta-data {
+    margin-top:20px;
+}
+
 #test_box{
     background-color: #909090;
     position:relative;

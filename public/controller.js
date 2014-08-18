@@ -9,7 +9,7 @@ app.factory('getStuff',function($http) {
      parsed_list = JSON.parse(returned_list);
      //console.log(parsed_list.length);
      for (var i=L;i<L+12;i++){
-       images_list.push(parsed_list[i].source);
+       images_list.push(parsed_list[i]);
        console.log(L);
      }
      L+=12;
@@ -49,9 +49,6 @@ app.controller('mainController', function($scope,getStuff,$http) {
       }
     });
 
-app.controller('viewController', function($scope) {
-        $scope.message = 'This is where you would view a wallpaper';
-    });
 
 app.controller('aboutController', function($scope) {
         $scope.message = 'Contact us! JK. This is just a demo.';
@@ -71,15 +68,15 @@ app.directive('onScrolled', function () {
 
 app.directive('myDraggable', ['$document', function($document) {
     return function(scope, element, attr) {
-      var startX = 0, startY = 0, x = 0, y = 0;
+      var startX = 0, startY = -1000, x = 0, y = 0;
 
       element.css({
        position: 'relative',
-       border: '1px solid red',
-       backgroundColor: 'lightgrey',
+       border: '0px solid red',
+       backgroundColor: 'grey',
        cursor: 'pointer',
       });
-
+      
       element.on('mousedown', function(event) {
         // Prevent default dragging of selected content
         event.preventDefault();
