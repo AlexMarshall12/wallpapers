@@ -3,8 +3,6 @@
  * Module dependencies.
  */
 var express = require('express');
-var routes = require('./routes');
-var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var imagedb = require('./models/db');
@@ -36,9 +34,7 @@ var Image = conn.model("Image", imagedb.imageSchema);
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + '/public'));
-app.use(express.logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(cookieParser());
 app.use(app.router);
@@ -52,7 +48,6 @@ app.get('/', function(req,res){
 	res.render('index');
 });
 app.get('/data', getImages);
-app.get('/users', user.list);
 app.get('/about', function(req,res){res.render('about')});
 app.post('/data', vote_and_view);
 app.get('/data/:image_id', function(req,res){
@@ -67,10 +62,6 @@ app.get('/data/:image_id', function(req,res){
 	});
 });
 
-app.get('/view/:image_id',function(req,res){
-	console.log(req.url.slice(6,30));
-	res.render('view');
-});
 
 function shuffled_array(array_length){
 	var currentIndex=array_length
