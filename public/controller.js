@@ -45,8 +45,8 @@ app.controller('mainController', function($scope,getStuff,$http) {
       $scope.test = "tested";
       $scope.vote = function(id){
           alert(id);
-          //$http.post("/data").success(alert(id));};
-      }
+          $http.put("/data").success(alert(id));};
+      
     });
 
 

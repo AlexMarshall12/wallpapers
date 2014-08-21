@@ -5,6 +5,7 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
+var bodyParser = require('body-parser');
 var imagedb = require('./models/db');
 var cookieParser=require('cookie-parser');
 var mongoose = require('mongoose');
@@ -15,7 +16,6 @@ var util = require('util');
 var cookieParser = require('cookie-parser');
 var uristring= "mongodb://heroku_app24230415:l91npmc6qlrdole3ptlq0s8not@ds045157.mongolab.com:45157/heroku_app24230415";
 //var uristring= 'mongodb://'+process.env.MONGOLAB_URI+'/images';
-var theport = process.env.PORT  || 5000;
 var appDir = path.dirname(require.main.filename);
 mongoose.connect(uristring,{ server: { socketOptions: { connectTimeoutMS: 1000 }}}, function(err,res){
 	if (err) {
@@ -32,9 +32,9 @@ var Image = conn.model("Image", imagedb.imageSchema);
 
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3001);
 app.use(express.static(__dirname + '/public'));
-app.use(express.json());
+app.use(bodyParser());
 app.use(express.methodOverride());
 app.use(cookieParser());
 app.use(app.router);

@@ -4,7 +4,7 @@
         <li ng-repeat="datum in data">
         <img ng-src="https://s3.amazonaws.com/supercuber.images/thumb_{{datum.source}}" ng-click="goLarge = !goLarge" ng-show="!goLarge" class="effectfront">
             <div ng-show="goLarge">
-                <img src="https://s3.amazonaws.com/supercuber.images/{{datum.source}}" ng-click="goLarge = !goLarge">
+                <img src="https://s3.amazonaws.com/supercuber.images/{{datum.source}}" ng-click="goLarge = !goLarge" width="1500">
                 <div id="test_box">
                 </div>
                 <span class="meta-data" my-draggable>
