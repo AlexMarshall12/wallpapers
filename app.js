@@ -5,15 +5,12 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
-var bodyParser = require('body-parser');
 var imagedb = require('./models/db');
 var mongoose = require('mongoose');
 var fs = require('fs');
 var app = express();
-var methodOverride = require('method-override');
 var logfmt=require('logfmt');
 var util = require('util');
-var cookieParser = require('cookie-parser');
 var uristring= "mongodb://heroku_app24230415:l91npmc6qlrdole3ptlq0s8not@ds045157.mongolab.com:45157/heroku_app24230415";
 //var uristring= 'mongodb://'+process.env.MONGOLAB_URI+'/images';
 var appDir = path.dirname(require.main.filename);
@@ -34,9 +31,6 @@ var Image = conn.model("Image", imagedb.imageSchema);
 // all environments
 app.set('port', process.env.PORT || 3001);
 app.use(express.static(__dirname + '/public'));
-app.use(bodyParser());
-app.use(methodOverride());
-app.use(cookieParser());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 // development only
@@ -49,7 +43,7 @@ app.get('/', function(req,res){
 });
 app.get('/data', getImages);
 app.get('/about', function(req,res){res.render('about')});
-app.post('/data', vote_and_view);
+//app.post('/data', vote_and_view);
 app.get('/data/:image_id', function(req,res){
 	id = req.url.slice(6,30);
 	console.log(id);
@@ -142,6 +136,7 @@ function getImages(req,res){
 });
 */
 
+			/*
 function vote_and_view(req,res){
 	var id=req.url.slice(6,30);
 	var id_array = JSON.parse(req.body.image_ids);
@@ -182,17 +177,16 @@ function vote_and_view(req,res){
 			var winner_adjust = adjustment_values.reduce(function(x,y){return x+K*(1-y)},0);
 			console.log('winner_adjust:'+winner_adjust)
 			console.log(adjustment_values);
-			/*
 			Image.findByIdAndUpdate(id, {$inc: {score: winner_adjust}},function(err,winner){
 				if(err) console.log('error errorrrrr')
 				else {console.log(winner)}
 			});
-			*/
 
 		}
 	}
 }
 
+			*/
 http.createServer(app).listen(app.get('port'), function( req, res){
 	console.log('Express server listening on port ' + app.get('port'));
 });
