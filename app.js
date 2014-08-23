@@ -30,16 +30,13 @@ var Image = conn.model("Image", imagedb.imageSchema);
 
 // all environments
 app.set('port', process.env.PORT || 3001);
-app.use(express.static(__dirname + '/public'));
-app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
 // development only
 if ('development' == app.get('env')) {
 	app.use(express.errorHandler());
 }
 
 app.get('/', function(req,res){
-	res.render('index');
+	res.sendfile(__dirname + '/public/index.html');
 });
 app.get('/data', getImages);
 app.get('/about', function(req,res){res.render('about')});
@@ -55,7 +52,7 @@ app.get('/data/:image_id', function(req,res){
 		res.json(data);}
 	});
 });
-
+app.use(express.static(path.join(__dirname, 'public')));
 
 function shuffled_array(array_length){
 	var currentIndex=array_length
